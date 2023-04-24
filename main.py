@@ -1,6 +1,7 @@
 import tkinter as tk
 
 from calculate_restore_page import CalculateRestorePage
+from info_page import InfoPage
 from interoperational_control_page import InterOperationalControlPage
 from select_patient_page import SelectPatient
 
@@ -13,7 +14,7 @@ def open_page2():
     InterOperationalControlPage()
 
 def open_page3():
-    pass
+    InfoPage()
 
 
 main_window = tk.Tk()

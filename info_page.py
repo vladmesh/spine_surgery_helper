@@ -3,11 +3,10 @@ import tkinter as tk
 from db_helper import DBHelper
 from enums import ParameterType
 
-
-class InterOperationalControlPage(tk.Toplevel):
+class InfoPage(tk.Toplevel):
     def __init__(self):
         super().__init__()
-        self.title("Интраоперационный контроль за восстановлением исходной анатомии позвоночника")
+        self.title("Сохранённые данные о пациентах")
 
         self.resizable(True, True)
 
@@ -45,40 +44,40 @@ class InterOperationalControlPage(tk.Toplevel):
         self.select_button.destroy()
         self.return_button.destroy()
         i = 1
-        for idx in (11, 15, 16, 17):
-            label_text = f"{idx} - {parameters[idx - 1][1]}"
-            if len(label_text) > 90:
-                idx_split = 70
-                while label_text[idx_split] != ' ':
-                    idx_split -= 1
-                label_text = label_text[:idx_split] + '\n' + label_text[idx_split + 1:]
-            label = tk.Label(self, text=label_text)
-            label.grid(row=i, column=0, sticky='w', padx=10, pady=5)
-            entry = tk.Entry(self)
-            entry.grid(row=i, column=3, padx=10, pady=5)
-            entry.insert(0, self.patient_parameters.get_parameter_value(idx, ParameterType.DEFAULT_KT))
-            entry.config(state='readonly')
-            self.prev_entries[idx] = entry
-
-            entry = tk.Entry(self)
-            entry.grid(row=i, column=2, padx=10, pady=5)
-            entry.config(state='readonly')
-            self.calc_entries[idx] = entry
-
-            entry = tk.Entry(self)
-            entry.grid(row=i, column=1, padx=10, pady=5)
-            self.input_entries[idx] = entry
-            i += 1
-
-        self.return_button = tk.Button(self, text="Вернуться", command=self._return)
-        self.return_button.grid(row=12, column=0, padx=10, pady=10)
-
-        self.calculate_button = tk.Button(self, text="Рассчитать", command=self.calculate)
-        self.calculate_button.grid(row=12, column=1, padx=10, pady=10)
-
-        self.save_button = tk.Button(self, text="Сохранить", command=self.save)
-        self.save_button.grid(row=12, column=2, padx=10, pady=10)
-        self.save_button.config(state='disabled')
+        # for idx in (11, 15, 16, 17):
+        #     label_text = f"{idx} - {parameters[idx - 1][1]}"
+        #     if len(label_text) > 90:
+        #         idx_split = 70
+        #         while label_text[idx_split] != ' ':
+        #             idx_split -= 1
+        #         label_text = label_text[:idx_split] + '\n' + label_text[idx_split + 1:]
+        #     label = tk.Label(self, text=label_text)
+        #     label.grid(row=i, column=0, sticky='w', padx=10, pady=5)
+        #     entry = tk.Entry(self)
+        #     entry.grid(row=i, column=3, padx=10, pady=5)
+        #     entry.insert(0, self.patient_parameters.get_parameter_value(idx, ParameterType.DEFAULT_KT))
+        #     entry.config(state='readonly')
+        #     self.prev_entries[idx] = entry
+        #
+        #     entry = tk.Entry(self)
+        #     entry.grid(row=i, column=2, padx=10, pady=5)
+        #     entry.config(state='readonly')
+        #     self.calc_entries[idx] = entry
+        #
+        #     entry = tk.Entry(self)
+        #     entry.grid(row=i, column=1, padx=10, pady=5)
+        #     self.input_entries[idx] = entry
+        #     i += 1
+        #
+        # self.return_button = tk.Button(self, text="Вернуться", command=self._return)
+        # self.return_button.grid(row=12, column=0, padx=10, pady=10)
+        #
+        # self.calculate_button = tk.Button(self, text="Рассчитать", command=self.calculate)
+        # self.calculate_button.grid(row=12, column=1, padx=10, pady=10)
+        #
+        # self.save_button = tk.Button(self, text="Сохранить", command=self.save)
+        # self.save_button.grid(row=12, column=2, padx=10, pady=10)
+        # self.save_button.config(state='disabled')
 
     def calculate(self):
         self.patient_parameters.delete_parameters_by_type(ParameterType.INTEROPERATION_RG)

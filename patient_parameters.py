@@ -24,9 +24,10 @@ class PatientParameters:
     def calculate_restore(self):
         for par in self.calculated_params_restore:
             self._calculate_parameter_restore(par)
-        for par in self.get_parameters_by_type(ParameterType.BROKEN_KT):
-            if par.par_id not in self.calculated_params_restore:
-                self.add_parameter(par.par_id, ParameterType.DEFAULT_KT, par.value)
+        # for par in self.get_parameters_by_type(ParameterType.BROKEN_KT):
+        #     if par.par_id not in self.calculated_params_restore:
+        #         self.add_parameter(par.par_id, ParameterType.DEFAULT_KT, par.value)
+        self.add_parameter(11, ParameterType.DEFAULT_KT, self.get_parameter_value(11, ParameterType.BROKEN_KT))
 
     def _calculate_parameter_restore(self, par):
         needed_params = {
@@ -79,7 +80,7 @@ class PatientParameters:
                  (17, ParameterType.INTEROPERATION_KT)],
             16: [(16, ParameterType.INTEROPERATION_RG), (11, ParameterType.INTEROPERATION_RG),
                  (11, ParameterType.DEFAULT_KT)],
-            17: [(17, ParameterType.INTEROPERATION_KT), (11, ParameterType.INTEROPERATION_KT),
+            17: [(17, ParameterType.INTEROPERATION_RG), (11, ParameterType.INTEROPERATION_RG),
                  (11, ParameterType.DEFAULT_KT)]
         }
 
@@ -145,3 +146,6 @@ class PatientParameters:
             if par.par_type in par_types:
                 result.append(par)
         return result
+
+    def delete_parameters_by_type(self, par_type):
+        self.parameters = [x for x in self.parameters if x.par_type != par_type]

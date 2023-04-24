@@ -1,5 +1,5 @@
 import sqlite3
-from patient_parameters import PatientParameters
+from patient_parameters import PatientParameters, ParameterType
 
 
 class DBHelper:
@@ -63,10 +63,11 @@ class DBHelper:
         self.connection.commit()
 
     def write_patient_parameters(self, patient_parameters: PatientParameters, types: tuple):
-        self.delete_parameters_by_patient_id_and_types(patient_parameters.patient_id, types)
+        types_int = [x.value for x in types]
+        self.delete_parameters_by_patient_id_and_types(patient_parameters.patient_id, types_int)
         for par in patient_parameters.get_parameters_by_types(types):
             self.cursor.execute("INSERT INTO patient_parameters VALUES (NULL, ?, ?, ?, ?)",
-                                (patient_parameters.patient_id, par.par_id, par.par_type, par.value))
+                                (patient_parameters.patient_id, par.par_id, par.par_type.value, par.value))
         self.connection.commit()
 
     def get_patient_parameters_by_parameter_type(self, patient_id, parameter_type) -> PatientParameters:
@@ -78,11 +79,11 @@ class DBHelper:
         return patient_parameters
 
     def get_patient_parameters(self, patient_id) -> PatientParameters:
-        self.cursor.execute("SELECT id, type, value FROM patient_parameters WHERE patient_id=?",
+        self.cursor.execute("SELECT parameter_id, type, value FROM patient_parameters WHERE patient_id=?",
                             (patient_id,))
         patient_parameters = PatientParameters(patient_id)
         for par in self.cursor.fetchall():
-            patient_parameters.add_parameter(par[0], par[1], par[2])
+            patient_parameters.add_parameter(par[0], ParameterType(par[1]), par[2])
         return patient_parameters
 
     def get_patients(self):
@@ -102,7 +103,6 @@ class DBHelper:
         self.connection.commit()
 
     def delete_parameters_by_patient_id_and_types(self, patient_id, types):
-        types = (int(x) for x in types)
         self.cursor.execute("DELETE FROM patient_parameters WHERE patient_id=? AND type IN ({})".format(
-            ','.join(['?'] * len(types))), (patient_id,) + types)
+            ','.join(['?'] * len(types))), [patient_id] + types)
         self.connection.commit()
