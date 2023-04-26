@@ -20,28 +20,36 @@ class CalculateRestorePage(tk.Toplevel):
 
         self.entries = {}
         self.result_entries = {}
+        self.calculated_parameters = [5, 6, 13, 15, 16, 17, 18]
+
+        label = tk.Label(self, text=f"Параметры сломанного отдела позвоночника на КТ")
+        label.grid(row=0, column=1, sticky='w', padx=10, pady=5)
+        label = tk.Label(self, text=f"Параметры исходной анатомии позвоночника на КТ")
+        label.grid(row=0, column=2, sticky='w', padx=10, pady=5)
 
         for i, (number, description) in enumerate(self.parameters):
             label = tk.Label(self, text=f"{number} – {description}")
-            label.grid(row=i, column=0, sticky='w', padx=10, pady=5)
+            label.grid(row=i+1, column=0, sticky='w', padx=10, pady=5)
 
-            entry = tk.Entry(self)
-            entry.grid(row=i, column=1, padx=10, pady=5)
-            self.entries[number] = entry
+            if number != 18:
+                entry = tk.Entry(self)
+                entry.grid(row=i+1, column=1, padx=10, pady=5)
+                self.entries[number] = entry
 
-            result_entry = tk.Entry(self, state='readonly')
-            result_entry.grid(row=i, column=2, padx=10, pady=5)
-            self.result_entries[number] = result_entry
+            if number in self.calculated_parameters:
+                result_entry = tk.Entry(self, state='readonly')
+                result_entry.grid(row=i+1, column=2, padx=10, pady=5)
+                self.result_entries[number] = result_entry
 
         calculate_button = tk.Button(self, text="Рассчитать", command=self.calculate)
-        calculate_button.grid(row=len(self.parameters), column=0, padx=10, pady=10)
+        calculate_button.grid(row=len(self.parameters) + 1, column=0, padx=10, pady=10)
 
         self.save_button = tk.Button(self, text="Сохранить", command=self.save)
-        self.save_button.grid(row=len(self.parameters), column=1, padx=10, pady=10)
+        self.save_button.grid(row=len(self.parameters) + 1, column=1, padx=10, pady=10)
         self.save_button.config(state='disabled')
 
         return_button = tk.Button(self, text="Вернуться", command=self._return)
-        return_button.grid(row=len(self.parameters), column=2, padx=10, pady=10)
+        return_button.grid(row=len(self.parameters) + 1, column=2, padx=10, pady=10)
 
     def _return(self):
         if not self.saved:
@@ -83,7 +91,7 @@ class CalculateRestorePage(tk.Toplevel):
                 continue
             self.patient_parameters.add_parameter(idx, ParameterType.BROKEN_KT, float_value)
         self.patient_parameters.calculate_restore()
-        for idx in range(1, 18):
+        for idx in self.calculated_parameters:
             self._write_answer(idx, self.patient_parameters.get_parameter_value(idx, ParameterType.DEFAULT_KT))
 
     def save(self):

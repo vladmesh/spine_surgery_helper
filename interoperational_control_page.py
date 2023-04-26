@@ -44,26 +44,33 @@ class InterOperationalControlPage(tk.Toplevel):
         self.patients_listbox.destroy()
         self.select_button.destroy()
         self.return_button.destroy()
+
+        label = tk.Label(self, text="Интраоперационные параметры на Rg")
+        label.grid(row=0, column=1, sticky='w', padx=10, pady=5)
+
+        label = tk.Label(self, text="Интраоперационные параметры на КТ")
+        label.grid(row=0, column=2, sticky='w', padx=10, pady=5)
+
+        label = tk.Label(self, text="Параметры исходной анатомии позвоночника на КТ")
+        label.grid(row=0, column=1, sticky='w', padx=10, pady=5)
+
         i = 1
         for idx in (11, 15, 16, 17):
             label_text = f"{idx} - {parameters[idx - 1][1]}"
-            if len(label_text) > 90:
-                idx_split = 70
-                while label_text[idx_split] != ' ':
-                    idx_split -= 1
-                label_text = label_text[:idx_split] + '\n' + label_text[idx_split + 1:]
             label = tk.Label(self, text=label_text)
             label.grid(row=i, column=0, sticky='w', padx=10, pady=5)
+
             entry = tk.Entry(self)
             entry.grid(row=i, column=3, padx=10, pady=5)
             entry.insert(0, self.patient_parameters.get_parameter_value(idx, ParameterType.DEFAULT_KT))
             entry.config(state='readonly')
             self.prev_entries[idx] = entry
 
-            entry = tk.Entry(self)
-            entry.grid(row=i, column=2, padx=10, pady=5)
-            entry.config(state='readonly')
-            self.calc_entries[idx] = entry
+            if idx != 11:
+                entry = tk.Entry(self)
+                entry.grid(row=i, column=2, padx=10, pady=5)
+                entry.config(state='readonly')
+                self.calc_entries[idx] = entry
 
             entry = tk.Entry(self)
             entry.grid(row=i, column=1, padx=10, pady=5)
