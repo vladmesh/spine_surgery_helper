@@ -36,7 +36,8 @@ class PatientParameters:
             13: [2, 14],
             15: [11, 16, 17],
             16: [1, 2, 3, 7, 9],
-            17: [2, 4, 6, 10]
+            17: [2, 4, 6, 10],
+            18: [12, 13, 14]
         }
         for needed_param in needed_params[par]:
             if self.get_parameter_value(needed_param, ParameterType.BROKEN_KT) == '':
@@ -67,6 +68,12 @@ class PatientParameters:
             par_2, par_4, par_6, par_10 = calc_params
             answer = (par_4 + par_6) / par_2 + par_10
             self.add_parameter(17, ParameterType.DEFAULT_KT, answer)
+        elif par == 18:
+            par_12, par_13, par_14 = calc_params
+            koeff = (par_12 + par_14) / 2
+            answer = (koeff - par_13) / koeff
+            self.add_parameter(18, ParameterType.DEFAULT_KT, answer)
+
         else:
             raise ValueError('Неверный параметр')
 
