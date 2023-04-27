@@ -8,18 +8,31 @@ includes = ["tkinter", "sqlite3"]
 # Add any data files that need to be included
 data_files = []
 
+# Add your top-level modules to the packages list
+packages = [
+    'calculate_restore_page',
+    'db_helper',
+    'enums',
+    'info_page',
+    'interoperational_control_page',
+    'main',
+    'patient_parameters',
+    'select_patient_page',
+]
+
 sys.argv.append("py2exe")
 
 setup(
-    options = {
+    options={
         "py2exe": {
             "compressed": 1,
             "optimize": 2,
             "includes": includes,
-            "bundle_files": 1
+            "packages": packages,
+            "bundle_files": 1,
         }
     },
-    zipfile = None,
-    console = [{"script": "main.py"}],
-    data_files = data_files
+    zipfile=None,
+    console=[{"script": "main.py"}],
+    data_files=data_files,
 )
