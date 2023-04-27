@@ -18,7 +18,7 @@ class PatientParameters:
             self.parameters = []
         else:
             self.parameters = parameters
-        self.calculated_params_restore = [5, 6, 13, 16, 17, 15]
+        self.calculated_params_restore = [5, 6, 13, 16, 17, 15, 18]
         self.calculated_params_control = [16, 17, 15]
 
     def calculate_restore(self):
