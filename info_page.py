@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import LEFT
 
 from db_helper import DBHelper
 from enums import ParameterType
@@ -39,7 +40,7 @@ class InfoPage(tk.Toplevel):
         i = 1
         for parameter in parameters:
             label_text = f"{parameter[0]} - {parameter[1]}"
-            label = tk.Label(self, text=label_text, font=("Arial Bold", 8))
+            label = tk.Label(self, text=label_text, font=("Arial Bold", 8), justify=LEFT)
             label.grid(row=i, column=0, sticky='w', padx=5, pady=5)
 
             entry = tk.Entry(self)
