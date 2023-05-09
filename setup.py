@@ -3,10 +3,10 @@ import py2exe
 import sys
 
 # Add any missing modules that need to be included
-includes = ["tkinter", "sqlite3"]
+includes = ["tkinter", "sqlite3", "pillow"]
 
 # Add any data files that need to be included
-data_files = []
+data_files = ["img.png"]
 
 # Add your top-level modules to the packages list
 packages = [
