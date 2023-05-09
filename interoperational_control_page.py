@@ -45,36 +45,37 @@ class InterOperationalControlPage(tk.Toplevel):
         self.select_button.destroy()
         self.return_button.destroy()
 
-        label = tk.Label(self, text="Интраоперационные параметры на Rg")
+        label = tk.Label(self, text="Интраоперационные параметры для ввода")
+        label.grid(row=0, column=0, sticky='w', padx=10, pady=5)
+
+        label = tk.Label(self, text="Расчётные интраоперационные параметры")
         label.grid(row=0, column=1, sticky='w', padx=10, pady=5)
 
-        label = tk.Label(self, text="Интраоперационные параметры на КТ")
+        label = tk.Label(self, text="Расчётные параметры исходной анатомии позвоночника")
         label.grid(row=0, column=2, sticky='w', padx=10, pady=5)
-
-        label = tk.Label(self, text="Параметры исходной анатомии позвоночника на КТ")
-        label.grid(row=0, column=1, sticky='w', padx=10, pady=5)
 
         i = 1
         for idx in (11, 15, 16, 17):
             label_text = f"{idx} - {parameters[idx - 1][1]}"
             label = tk.Label(self, text=label_text)
-            label.grid(row=i, column=0, sticky='w', padx=10, pady=5)
+            label.grid(row=i, column=3, sticky='w', padx=10, pady=5)
 
             entry = tk.Entry(self)
-            entry.grid(row=i, column=3, padx=10, pady=5)
+            entry.grid(row=i, column=2, padx=10, pady=5)
             entry.insert(0, self.patient_parameters.get_parameter_value(idx, ParameterType.DEFAULT_KT))
             entry.config(state='readonly')
             self.prev_entries[idx] = entry
 
             if idx != 11:
                 entry = tk.Entry(self)
-                entry.grid(row=i, column=2, padx=10, pady=5)
+                entry.grid(row=i, column=1, padx=10, pady=5)
                 entry.config(state='readonly')
                 self.calc_entries[idx] = entry
 
-            entry = tk.Entry(self)
-            entry.grid(row=i, column=1, padx=10, pady=5)
-            self.input_entries[idx] = entry
+            if idx != 15:
+                entry = tk.Entry(self)
+                entry.grid(row=i, column=0, padx=10, pady=5)
+                self.input_entries[idx] = entry
             i += 1
 
         self.return_button = tk.Button(self, text="Вернуться", command=self._return)
@@ -95,7 +96,8 @@ class InterOperationalControlPage(tk.Toplevel):
         for idx in self.calc_entries:
             self.calc_entries[idx].config(state='normal')
             self.calc_entries[idx].delete(0, tk.END)
-            self.calc_entries[idx].insert(0, self.patient_parameters.get_parameter_value(idx, ParameterType.INTEROPERATION_KT))
+            self.calc_entries[idx].insert(0, self.patient_parameters.get_parameter_value(idx,
+                                                                                         ParameterType.INTEROPERATION_KT))
             self.calc_entries[idx].config(state='readonly')
 
         self.save_button.config(state='normal')
