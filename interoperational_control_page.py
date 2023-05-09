@@ -5,7 +5,7 @@ from enums import ParameterType
 
 
 class InterOperationalControlPage(tk.Toplevel):
-    def __init__(self):
+    def __init__(self, patient_id):
         super().__init__()
         self.title("Интраоперационный контроль за восстановлением исходной анатомии позвоночника")
 
@@ -13,38 +13,22 @@ class InterOperationalControlPage(tk.Toplevel):
 
         self.db_helper = DBHelper()
 
-        self.patients = self.db_helper.get_patients()
-
-        self.patients_listbox = tk.Listbox(self, selectmode='single')
-        self.patients_listbox.grid(row=0, column=0, padx=10, pady=10)
-
-        for patient in self.patients:
-            self.patients_listbox.insert(tk.END, f"{patient[1]}")
-
-        self.select_button = tk.Button(self, text="Выбрать", command=self.select)
-        self.select_button.grid(row=1, column=0, padx=10, pady=10)
-
-        self.return_button = tk.Button(self, text="Вернуться", command=self._return)
-        self.return_button.grid(row=2, column=0, padx=10, pady=10)
 
         self.input_entries = {}
         self.calc_entries = {}
         self.prev_entries = {}
 
         self.patient_parameters = None
+        self.patient_id = patient_id
+        self.generate()
 
     def _return(self):
         self.destroy()
 
-    def select(self):
-        selected_patient_idx = self.patients_listbox.curselection()[0]
-        self.selected_patient_id = self.patients[selected_patient_idx][0]
-        self.patient_parameters = self.db_helper.get_patient_parameters(self.selected_patient_id)
-        parameters = self.db_helper.get_parameters()
-        self.patients_listbox.destroy()
-        self.select_button.destroy()
-        self.return_button.destroy()
 
+    def generate(self):
+        self.patient_parameters = self.db_helper.get_patient_parameters(self.patient_id)
+        parameters = self.db_helper.get_parameters()
         label = tk.Label(self, text="Интраоперационные параметры для ввода")
         label.grid(row=0, column=0, sticky='w', padx=10, pady=5)
 

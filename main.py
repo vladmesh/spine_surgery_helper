@@ -11,10 +11,11 @@ def open_page1():
 
 
 def open_page2():
-    InterOperationalControlPage()
+    SelectPatient(InterOperationalControlPage)
+
 
 def open_page3():
-    InfoPage()
+    SelectPatient(InfoPage)
 
 
 main_window = tk.Tk()
