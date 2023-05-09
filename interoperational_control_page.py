@@ -73,20 +73,20 @@ class InterOperationalControlPage(tk.Toplevel):
         self.save_button.config(state='disabled')
 
     def calculate(self):
-        self.patient_parameters.delete_parameters_by_type(ParameterType.INTEROPERATION_RG)
+        self.patient_parameters.delete_parameters_by_type(ParameterType.INTEROPERATION_INPUT)
         for idx in self.input_entries:
-            self.patient_parameters.add_parameter(idx, ParameterType.INTEROPERATION_RG, self.input_entries[idx].get())
+            self.patient_parameters.add_parameter(idx, ParameterType.INTEROPERATION_INPUT, self.input_entries[idx].get())
         self.patient_parameters.calculate_control()
         for idx in self.calc_entries:
             self.calc_entries[idx].config(state='normal')
             self.calc_entries[idx].delete(0, tk.END)
             self.calc_entries[idx].insert(0, self.patient_parameters.get_parameter_value(idx,
-                                                                                         ParameterType.INTEROPERATION_KT))
+                                                                                         ParameterType.INTEROPERATION_CALCULATED))
             self.calc_entries[idx].config(state='readonly')
 
         self.save_button.config(state='normal')
 
     def save(self):
-        self.db_helper.write_patient_parameters(self.patient_parameters, (ParameterType.INTEROPERATION_KT,
-                                                                          ParameterType.INTEROPERATION_RG))
+        self.db_helper.write_patient_parameters(self.patient_parameters, (ParameterType.INTEROPERATION_CALCULATED,
+                                                                          ParameterType.INTEROPERATION_INPUT))
         self.save_button.config(state='disabled')

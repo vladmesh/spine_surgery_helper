@@ -34,6 +34,7 @@ class SelectPatient(tk.Toplevel):
     def select(self):
         selected_patient = self.patients_listbox.curselection()
         self.next_page(self.patients[selected_patient[0]][0])
+        self.destroy()
 
     def delete(self):
         selected_patient_idx = self.patients_listbox.curselection()[0]

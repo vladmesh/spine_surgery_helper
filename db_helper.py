@@ -34,9 +34,9 @@ class DBHelper:
                  'позвонка до переднего края верхней кортикальной пластинки тела нижележащего позвонка)'),
             (17, 'Заднее межтеловое расстояние (от заднего края нижней кортикальной пластинки тела \n'
                  'вышележащего позвонка до заднего края верхней кортикальной пластинки тела нижележащего позвонка)'),
-            (18, 'Дефицит просвета позвоночного канала, %'),
-            (19, 'Потеря передней высоты тела позвонка, %'),
-            (20, 'Потеря задней высоты тела позвонка, %'),
+            (18, 'дефицит просвета позвоночного канала, %'),
+            (19, 'потеря передней высоты тела позвонка, %'),
+            (20, 'потеря задней высоты тела позвонка, %'),
         ]
         if self.count_parameters() == 0:
             for i in parameters:
@@ -96,6 +96,10 @@ class DBHelper:
     def get_patient_by_name(self, patient_name):
         self.cursor.execute("SELECT id, name FROM patients WHERE name=?", (patient_name,))
         return self.cursor.fetchone()
+
+    def get_patient_name(self, patient_id):
+        self.cursor.execute("SELECT  name FROM patients WHERE id=?", (patient_id,))
+        return self.cursor.fetchone()[0]
 
     def get_parameters(self):
         self.cursor.execute("SELECT id, name FROM parameters")

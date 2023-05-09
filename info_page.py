@@ -28,13 +28,13 @@ class InfoPage(tk.Toplevel):
         label = tk.Label(self, text="Параметры сломанного отдела позвоночника на КТ", font=("Arial Bold", 8))
         label.grid(row=0, column=1, sticky='w', padx=5, pady=5)
 
-        label = tk.Label(self, text="Интраоперационные параметры на Rg", font=("Arial Bold", 8))
+        label = tk.Label(self, text="Расчётные параметры исходной анатомии позвоночника", font=("Arial Bold", 8))
         label.grid(row=0, column=2, sticky='w', padx=5, pady=5)
 
-        label = tk.Label(self, text="Интраоперационные параметры на КТ", font=("Arial Bold", 8))
+        label = tk.Label(self, text="Интраоперационные параметры для ввода", font=("Arial Bold", 8))
         label.grid(row=0, column=3, sticky='w', padx=5, pady=5)
 
-        label = tk.Label(self, text="Параметры исходной анатомии позвоночника на КТ", font=("Arial Bold", 8))
+        label = tk.Label(self, text="Расчётные интраоперационные параметры", font=("Arial Bold", 8))
         label.grid(row=0, column=4, sticky='w', padx=5, pady=5)
         i = 1
         for parameter in parameters:
@@ -49,17 +49,19 @@ class InfoPage(tk.Toplevel):
 
             entry = tk.Entry(self)
             entry.grid(row=i, column=2, padx=8, pady=5)
-            entry.insert(0, self.patient_parameters.get_parameter_value(parameter[0], ParameterType.INTEROPERATION_RG))
+            entry.insert(0, self.patient_parameters.get_parameter_value(parameter[0], ParameterType.DEFAULT_KT))
             entry.config(state='readonly')
 
             entry = tk.Entry(self)
             entry.grid(row=i, column=3, padx=8, pady=5)
-            entry.insert(0, self.patient_parameters.get_parameter_value(parameter[0], ParameterType.INTEROPERATION_KT))
+            entry.insert(0,
+                         self.patient_parameters.get_parameter_value(parameter[0], ParameterType.INTEROPERATION_INPUT))
             entry.config(state='readonly')
 
             entry = tk.Entry(self)
             entry.grid(row=i, column=4, padx=8, pady=5)
-            entry.insert(0, self.patient_parameters.get_parameter_value(parameter[0], ParameterType.DEFAULT_KT))
+            entry.insert(0, self.patient_parameters.get_parameter_value(parameter[0],
+                                                                        ParameterType.INTEROPERATION_CALCULATED))
             entry.config(state='readonly')
 
             i += 1
@@ -72,21 +74,35 @@ class InfoPage(tk.Toplevel):
 
     def to_excel(self):
         workbook = xlsxwriter.Workbook('Report.xlsx')
+        bold = workbook.add_format({'bold': True})
+        cell_format = workbook.add_format({'text_wrap': True, 'bold': True, 'align': 'center', 'font': 'Times New Roman'})
+        auto_wrap = workbook.add_format({'text_wrap': True, 'align': 'left', 'font': 'Times New Roman'})
         worksheet = workbook.add_worksheet()
-        worksheet.write(0, 1, "Параметры сломанного отдела позвоночника на КТ")
-        worksheet.write(0, 2, "Интраоперационные параметры на Rg")
-        worksheet.write(0, 3, "Интраоперационные параметры на КТ")
-        worksheet.write(0, 4, "Параметры исходной анатомии позвоночника на КТ")
+        worksheet.write(0, 0, "Фамилия И.О., год рождения:", bold)
+        worksheet.write(0, 1, self.db_helper.get_patient_name(self.patient_id))
+        worksheet.set_row(2, 4 * 18, cell_format)
+
+        worksheet.write(2, 1, "Параметры сломанного отдела позвоночника")
+        worksheet.write(2, 2, "Расчётные параметры исходной анатомии позвоночника")
+        worksheet.write(2, 3, "Интраоперационные параметры для ввода")
+        worksheet.write(2, 4, "Расчётные интраоперационные параметры")
+        worksheet.set_column(1, 4, 18)
+        worksheet.set_column(0, 0, 44, auto_wrap)
+
         parameters = self.db_helper.get_parameters()
-        i = 1
+        for i in range(1, len(parameters) + 1):
+            worksheet.set_row(i + 2, 3 * 18)
+        i = 3
         for parameter in parameters:
-            worksheet.write(i, 0, parameter[0])
+            worksheet.write(i, 0, f"{parameter[0]} - {parameter[1]}")
             worksheet.write(i, 1, self.patient_parameters.get_parameter_value(parameter[0], ParameterType.BROKEN_KT))
             worksheet.write(i, 2,
-                            self.patient_parameters.get_parameter_value(parameter[0], ParameterType.INTEROPERATION_RG))
+                            self.patient_parameters.get_parameter_value(parameter[0], ParameterType.DEFAULT_KT))
             worksheet.write(i, 3,
-                            self.patient_parameters.get_parameter_value(parameter[0], ParameterType.INTEROPERATION_KT))
-            worksheet.write(i, 4, self.patient_parameters.get_parameter_value(parameter[0], ParameterType.DEFAULT_KT))
+                            self.patient_parameters.get_parameter_value(parameter[0],
+                                                                        ParameterType.INTEROPERATION_INPUT))
+            worksheet.write(i, 4, self.patient_parameters.get_parameter_value(parameter[0],
+                                                                              ParameterType.INTEROPERATION_CALCULATED))
             i += 1
         workbook.close()
 
