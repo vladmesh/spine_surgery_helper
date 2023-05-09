@@ -18,7 +18,7 @@ class PatientParameters:
             self.parameters = []
         else:
             self.parameters = parameters
-        self.calculated_params_restore = [5, 6, 13, 16, 17, 15, 18]
+        self.calculated_params_restore = [5, 6, 13, 16, 17, 15, 18, 19, 20]
         self.calculated_params_control = [16, 17, 15]
 
     def calculate_restore(self):
@@ -31,49 +31,57 @@ class PatientParameters:
 
     def _calculate_parameter_restore(self, par):
         needed_params = {
-            5: [2, 3, 7],
-            6: [2, 4, 8],
-            13: [2, 14],
-            15: [11, 16, 17],
-            16: [1, 2, 3, 7, 9],
-            17: [2, 4, 6, 10],
-            18: [12, 13, 14]
+            5: [(3, ParameterType.BROKEN_KT), (7, ParameterType.BROKEN_KT)],
+            6: [(4, ParameterType.BROKEN_KT), (8, ParameterType.BROKEN_KT)],
+            13: [(12, ParameterType.BROKEN_KT), (14, ParameterType.BROKEN_KT)],
+            15: [(11, ParameterType.BROKEN_KT), (16, ParameterType.DEFAULT_KT), (17, ParameterType.DEFAULT_KT)],
+            16: [(1, ParameterType.BROKEN_KT), (9, ParameterType.BROKEN_KT), (5, ParameterType.DEFAULT_KT)],
+            17: [(2, ParameterType.BROKEN_KT), (10, ParameterType.BROKEN_KT), (6, ParameterType.DEFAULT_KT)],
+            18: [(13, ParameterType.DEFAULT_KT), (13, ParameterType.BROKEN_KT)],
+            19: [(5, ParameterType.DEFAULT_KT), (5, ParameterType.BROKEN_KT)],
+            20: [(6, ParameterType.DEFAULT_KT), (6, ParameterType.BROKEN_KT)],
         }
         for needed_param in needed_params[par]:
-            if self.get_parameter_value(needed_param, ParameterType.BROKEN_KT) == '':
+            if self.get_parameter_value(needed_param[0], needed_param[1]) == '':
                 print('Для расчёта параметра', par, 'необходимо ввести параметр', needed_param)
                 return
-        calc_params = [self.get_parameter_value(x, ParameterType.BROKEN_KT) for x in needed_params[par]]
+        calc_params = [self.get_parameter_value(x[0], x[1]) for x in needed_params[par]]
         if par == 5:
-            par_2, par_3, par_7 = calc_params
-            answer = (par_3 + par_7) / par_2
+            par_3, par_7 = calc_params
+            answer = (par_3 + par_7) / 2
             self.add_parameter(5, ParameterType.DEFAULT_KT, answer)
         elif par == 6:
-            par_2, par_4, par_8 = calc_params
-            answer = (par_4 + par_8) / par_2
+            par_4, par_8 = calc_params
+            answer = (par_4 + par_8) / 2
             self.add_parameter(6, ParameterType.DEFAULT_KT, answer)
         elif par == 13:
-            par_2, par_14 = calc_params
-            answer = (par_2 + par_14) / par_2
+            par_12, par_14 = calc_params
+            answer = (par_12 + par_14) / 2
             self.add_parameter(13, ParameterType.DEFAULT_KT, answer)
         elif par == 15:
-            par_11, par_16, par_17 = calc_params
-            answer = math.asin((par_16 - par_17) / par_11)
+            par_11_b, par_16_d, par_17_d = calc_params
+            answer = math.asin((par_16_d - par_17_d) / par_11_b)
             self.add_parameter(15, ParameterType.DEFAULT_KT, answer)
         elif par == 16:
-            par_1, par_2, par_3, par_7, par_9 = calc_params
-            answer = (par_3 + par_7) / par_2 + par_1 + par_9
+            par_1_b, par_9_b, par_5_d = calc_params
+            answer = par_1_b + par_9_b + par_5_d
             self.add_parameter(16, ParameterType.DEFAULT_KT, answer)
         elif par == 17:
-            par_2, par_4, par_6, par_10 = calc_params
-            answer = (par_4 + par_6) / par_2 + par_10
+            par_2_b, par_10_b, par_6_d = calc_params
+            answer = par_2_b + par_10_b + par_6_d
             self.add_parameter(17, ParameterType.DEFAULT_KT, answer)
         elif par == 18:
-            par_12, par_13, par_14 = calc_params
-            koeff = (par_12 + par_14) / 2
-            answer = (koeff - par_13) / koeff
+            par_13_d, par_13_b = calc_params
+            answer = ((par_13_d - par_13_b) / par_13_d) * 100
             self.add_parameter(18, ParameterType.DEFAULT_KT, answer)
-
+        elif par == 19:
+            par_5_d, par_5_b = calc_params
+            answer = ((par_5_d - par_5_b) / par_5_d) * 100
+            self.add_parameter(19, ParameterType.DEFAULT_KT, answer)
+        elif par == 20:
+            par_6_d, par_6_b = calc_params
+            answer = ((par_6_d - par_6_b) / par_6_d) * 100
+            self.add_parameter(20, ParameterType.DEFAULT_KT, answer)
         else:
             raise ValueError('Неверный параметр')
 
