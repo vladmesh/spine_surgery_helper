@@ -6,7 +6,7 @@ from tkinter import LEFT
 from PIL import ImageTk, Image
 from db_helper import DBHelper
 from enums import ParameterType
-from patient_parameters import PatientParameters, PatientParameter
+from patient_parameters import PatientParameters
 
 
 class CalculateRestorePage(tk.Toplevel):
@@ -23,7 +23,7 @@ class CalculateRestorePage(tk.Toplevel):
         self.result_entries = {}
         self.calculated_parameters = [5, 6, 13, 15, 16, 17, 18, 19, 20]
         self.obligatory_params = [1, 2, 3, 4, 5, 5, 7, 8, 9, 10, 11]
-        image = Image.open("img.png")
+        image = Image.open("images/img.png")
         image = image.resize((250, 250), Image.ANTIALIAS)
         image = ImageTk.PhotoImage(image)
         image_label = tk.Label(self, image=image)
