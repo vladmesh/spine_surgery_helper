@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import LEFT
+import tkinter.messagebox
 
 from db_helper import DBHelper
 from enums import ParameterType
@@ -74,13 +75,15 @@ class InfoPage(tk.Toplevel):
         self.send_mail_button.grid(row=i, column=1, padx=8, pady=8)
 
     def to_excel(self):
-        workbook = xlsxwriter.Workbook('Report.xlsx')
+        patient_name = self.db_helper.get_patient_name(self.patient_id)
+        filename = f"Report_{patient_name}.xlsx"
+        workbook = xlsxwriter.Workbook(filename)
         bold = workbook.add_format({'bold': True})
         cell_format = workbook.add_format({'text_wrap': True, 'bold': True, 'align': 'center', 'font': 'Times New Roman'})
         auto_wrap = workbook.add_format({'text_wrap': True, 'align': 'left', 'font': 'Times New Roman'})
         worksheet = workbook.add_worksheet()
         worksheet.write(0, 0, "Фамилия И.О., год рождения:", bold)
-        worksheet.write(0, 1, self.db_helper.get_patient_name(self.patient_id))
+        worksheet.write(0, 1, patient_name)
         worksheet.set_row(2, 4 * 18, cell_format)
 
         worksheet.write(2, 1, "Параметры сломанного отдела позвоночника")
@@ -106,6 +109,7 @@ class InfoPage(tk.Toplevel):
                                                                               ParameterType.INTEROPERATION_CALCULATED))
             i += 1
         workbook.close()
+        tk.messagebox.showinfo("Экспорт", f"Отчёт успешно экспортирован в файл {filename}")
 
     def send_mail(self):
         pass

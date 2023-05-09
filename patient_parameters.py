@@ -21,6 +21,7 @@ class PatientParameters:
         self.calculated_params_restore = [5, 6, 13, 16, 17, 15, 18, 19, 20]
         self.calculated_params_control = [16, 17, 15]
 
+
     def calculate_restore(self):
         for par in self.calculated_params_restore:
             self._calculate_parameter_restore(par)
@@ -61,6 +62,7 @@ class PatientParameters:
         elif par == 15:
             par_11_b, par_16_d, par_17_d = calc_params
             answer = math.asin((par_16_d - par_17_d) / par_11_b)
+            answer =  math.degrees(answer)
             self.add_parameter(15, ParameterType.DEFAULT_KT, answer)
         elif par == 16:
             par_1_b, par_9_b, par_5_d = calc_params

@@ -1,8 +1,9 @@
-import math
 import tkinter as tk
 import tkinter.messagebox
 import tkinter.simpledialog
+from tkinter import LEFT
 
+from PIL import ImageTk, Image
 from db_helper import DBHelper
 from enums import ParameterType
 from patient_parameters import PatientParameters, PatientParameter
@@ -21,14 +22,21 @@ class CalculateRestorePage(tk.Toplevel):
         self.entries = {}
         self.result_entries = {}
         self.calculated_parameters = [5, 6, 13, 15, 16, 17, 18, 19, 20]
+        self.obligatory_params = [1, 2, 3, 4, 5, 5, 7, 8, 9, 10, 11]
+        image = Image.open("img.png")
+        image = image.resize((250, 250), Image.ANTIALIAS)
+        image = ImageTk.PhotoImage(image)
+        image_label = tk.Label(self, image=image)
+        image_label.image = image
+        image_label.grid(row=6, column=3, rowspan=10, padx=10, pady=5)
 
-        label = tk.Label(self, text=f"Параметры сломанного отдела позвоночника")
+        label = tk.Label(self, text=f"Параметры сломанного \n отдела позвоночника")
         label.grid(row=0, column=0, sticky='w', padx=10, pady=5)
-        label = tk.Label(self, text=f"Расчётные параметры исходной анатомии позвоночника")
+        label = tk.Label(self, text=f"Расчётные параметры \n исходной анатомии позвоночника")
         label.grid(row=0, column=1, sticky='w', padx=10, pady=5)
 
         for i, (number, description) in enumerate(self.parameters):
-            label = tk.Label(self, text=f"{number} – {description}")
+            label = tk.Label(self, text=f"{number} – {description}", justify=LEFT)
             label.grid(row=i + 1, column=2, sticky='w', padx=10, pady=5)
 
             if number not in (18, 19, 20):
@@ -40,6 +48,7 @@ class CalculateRestorePage(tk.Toplevel):
                 result_entry = tk.Entry(self, state='readonly')
                 result_entry.grid(row=i + 1, column=1, padx=10, pady=5)
                 self.result_entries[number] = result_entry
+
 
         calculate_button = tk.Button(self, text="Рассчитать", command=self.calculate)
         calculate_button.grid(row=len(self.parameters) + 1, column=0, padx=10, pady=10)
@@ -78,6 +87,10 @@ class CalculateRestorePage(tk.Toplevel):
         return answer
 
     def calculate(self):
+        for idx in self.obligatory_params:
+            if self.entries[idx].get() == '':
+                tk.messagebox.showerror("Ошибка", f"Параметр {idx} не заполнен")
+                return
         self.save_button.config(state='normal')
         self.patient_parameters = PatientParameters()
         for idx in range(1, 18):
