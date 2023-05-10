@@ -23,12 +23,12 @@ class CalculateRestorePage(tk.Toplevel):
         self.result_entries = {}
         self.calculated_parameters = [5, 6, 13, 15, 16, 17, 18, 19, 20]
         self.obligatory_params = [1, 2, 3, 4, 5, 5, 7, 8, 9, 10, 11]
-        image = Image.open("images/img.png")
-        image = image.resize((250, 250), Image.ANTIALIAS)
-        image = ImageTk.PhotoImage(image)
-        image_label = tk.Label(self, image=image)
-        image_label.image = image
-        image_label.grid(row=6, column=3, rowspan=10, padx=10, pady=5)
+        # image = Image.open("images/img.png")
+        # image = image.resize((250, 250), Image.ANTIALIAS)
+        # image = ImageTk.PhotoImage(image)
+        # image_label = tk.Label(self, image=image)
+        # image_label.image = image
+        # image_label.grid(row=6, column=3, rowspan=10, padx=10, pady=5)
 
         label = tk.Label(self, text=f"Параметры сломанного \n отдела позвоночника")
         label.grid(row=0, column=0, sticky='w', padx=10, pady=5)
