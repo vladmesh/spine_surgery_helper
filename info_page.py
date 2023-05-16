@@ -27,40 +27,40 @@ class InfoPage(tk.Toplevel):
         self.patient_parameters = self.db_helper.get_patient_parameters(self.patient_id)
         parameters = self.db_helper.get_parameters()
 
-        label = tk.Label(self, text="Параметры сломанного отдела позвоночника на КТ", font=("Arial Bold", 8))
+        label = tk.Label(self, text="Параметры сломанного\nотдела позвоночника\n на КТ", font=("Arial Bold", 7))
         label.grid(row=0, column=1, sticky='w', padx=5, pady=5)
 
-        label = tk.Label(self, text="Расчётные параметры исходной анатомии позвоночника", font=("Arial Bold", 8))
+        label = tk.Label(self, text="Расчётные параметры\n исходной анатомии\n позвоночника", font=("Arial Bold", 7))
         label.grid(row=0, column=2, sticky='w', padx=5, pady=5)
 
-        label = tk.Label(self, text="Интраоперационные параметры для ввода", font=("Arial Bold", 8))
+        label = tk.Label(self, text="Интраоперационные параметры\n для ввода", font=("Arial Bold", 7))
         label.grid(row=0, column=3, sticky='w', padx=5, pady=5)
 
-        label = tk.Label(self, text="Расчётные интраоперационные параметры", font=("Arial Bold", 8))
+        label = tk.Label(self, text="Расчётные интраоперационные\n параметры", font=("Arial Bold", 7))
         label.grid(row=0, column=4, sticky='w', padx=5, pady=5)
         i = 1
         for parameter in parameters:
             label_text = f"{parameter[0]} - {parameter[1]}"
-            label = tk.Label(self, text=label_text, font=("Arial Bold", 8), justify=LEFT)
+            label = tk.Label(self, text=label_text, font=("Arial Bold", 7), justify=LEFT)
             label.grid(row=i, column=0, sticky='w', padx=5, pady=5)
 
-            entry = tk.Entry(self)
+            entry = tk.Entry(self, width=9)
             entry.grid(row=i, column=1, padx=8, pady=5)
             entry.insert(0, self.patient_parameters.get_parameter_value_str(parameter[0], ParameterType.BROKEN_KT))
             entry.config(state='readonly')
 
-            entry = tk.Entry(self)
+            entry = tk.Entry(self, width=9)
             entry.grid(row=i, column=2, padx=8, pady=5)
             entry.insert(0, self.patient_parameters.get_parameter_value_str(parameter[0], ParameterType.DEFAULT_KT))
             entry.config(state='readonly')
 
-            entry = tk.Entry(self)
+            entry = tk.Entry(self, width=9)
             entry.grid(row=i, column=3, padx=8, pady=5)
             entry.insert(0,
                          self.patient_parameters.get_parameter_value_str(parameter[0], ParameterType.INTEROPERATION_INPUT))
             entry.config(state='readonly')
 
-            entry = tk.Entry(self)
+            entry = tk.Entry(self, width=9)
             entry.grid(row=i, column=4, padx=8, pady=5)
             entry.insert(0, self.patient_parameters.get_parameter_value_str(parameter[0],
                                                                         ParameterType.INTEROPERATION_CALCULATED))
