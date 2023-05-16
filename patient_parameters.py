@@ -93,8 +93,8 @@ class PatientParameters:
 
     def _calculate_parameter_control(self, par):
         needed_params = {
-            15: [(11, ParameterType.DEFAULT_KT), (16, ParameterType.INTEROPERATION_CALCULATED),
-                 (17, ParameterType.INTEROPERATION_CALCULATED)],
+            15: [(11, ParameterType.INTEROPERATION_INPUT), (16, ParameterType.INTEROPERATION_INPUT),
+                 (17, ParameterType.INTEROPERATION_INPUT)],
             16: [(16, ParameterType.INTEROPERATION_INPUT), (11, ParameterType.INTEROPERATION_INPUT),
                  (11, ParameterType.DEFAULT_KT)],
             17: [(17, ParameterType.INTEROPERATION_INPUT), (11, ParameterType.INTEROPERATION_INPUT),
@@ -107,16 +107,16 @@ class PatientParameters:
                 return
         calc_params = [self.get_parameter_value(x[0], x[1]) for x in needed_params[par]]
         if par == 15:
-            par_11_1, par_16_3, par_17_3 = calc_params
-            answer = math.asin((par_16_3 - par_17_3) / par_11_1)
+            par_11_3, par_16_3, par_17_3 = calc_params
+            answer = math.degrees(math.asin((par_16_3 - par_17_3) / par_11_3))
             self.add_parameter(15, ParameterType.INTEROPERATION_CALCULATED, answer)
         elif par == 16:
             par_16_2, par_11_2, par_11_1 = calc_params
-            answer = par_16_2 / par_11_2 / par_11_1
+            answer = par_16_2 / (par_11_2 / par_11_1)
             self.add_parameter(16, ParameterType.INTEROPERATION_CALCULATED, answer)
         elif par == 17:
             par_17_2, par_11_2, par_11_1 = calc_params
-            answer = par_17_2 / par_11_2 / par_11_1
+            answer = par_17_2 / (par_11_2 / par_11_1)
             self.add_parameter(17, ParameterType.INTEROPERATION_CALCULATED, answer)
         else:
             raise ValueError('Неверный параметр')
