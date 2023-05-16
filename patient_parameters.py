@@ -132,7 +132,7 @@ class PatientParameters:
         else:
             raise ValueError('Параметр с таким id и типом уже существует')
 
-    def get_parameter(self, par_id, par_type: ParameterType) -> Any | None:
+    def get_parameter(self, par_id, par_type: ParameterType):
         for par in self.parameters:
             if par.par_id == par_id and par.par_type == par_type:
                 return par

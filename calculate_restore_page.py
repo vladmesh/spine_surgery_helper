@@ -23,20 +23,20 @@ class CalculateRestorePage(tk.Toplevel):
         self.result_entries = {}
         self.calculated_parameters = [5, 6, 13, 15, 16, 17, 18, 19, 20]
         self.obligatory_params = [1, 2, 3, 4, 5, 5, 7, 8, 9, 10, 11]
-        # image = Image.open("images/img.png")
-        # image = image.resize((250, 250), Image.ANTIALIAS)
-        # image = ImageTk.PhotoImage(image)
-        # image_label = tk.Label(self, image=image)
-        # image_label.image = image
-        # image_label.grid(row=6, column=3, rowspan=10, padx=10, pady=5)
+        image = Image.open("images/img.png")
+        image = image.resize((250, 250), Image.ANTIALIAS)
+        image = ImageTk.PhotoImage(image)
+        image_label = tk.Label(self, image=image)
+        image_label.image = image
+        image_label.grid(row=6, column=3, rowspan=10, padx=10, pady=5)
 
-        label = tk.Label(self, text=f"Параметры сломанного \n отдела позвоночника")
+        label = tk.Label(self, text=f"Параметры сломанного \n отдела позвоночника", font=("Arial Bold", 8))
         label.grid(row=0, column=0, sticky='w', padx=10, pady=5)
-        label = tk.Label(self, text=f"Расчётные параметры \n исходной анатомии позвоночника")
+        label = tk.Label(self, text=f"Расчётные параметры \n исходной анатомии позвоночника", font=("Arial Bold", 8))
         label.grid(row=0, column=1, sticky='w', padx=10, pady=5)
 
         for i, (number, description) in enumerate(self.parameters):
-            label = tk.Label(self, text=f"{number} – {description}", justify=LEFT)
+            label = tk.Label(self, text=f"{number} – {description}", justify=LEFT, font=("Arial Bold", 8))
             label.grid(row=i + 1, column=2, sticky='w', padx=10, pady=5)
 
             if number not in (18, 19, 20):
@@ -45,7 +45,7 @@ class CalculateRestorePage(tk.Toplevel):
                 self.entries[number] = entry
 
             if number in self.calculated_parameters:
-                result_entry = tk.Entry(self, state='readonly')
+                result_entry = tk.Entry(self, state='readonly', font=("Arial Bold", 8))
                 result_entry.grid(row=i + 1, column=1, padx=10, pady=5)
                 self.result_entries[number] = result_entry
 
