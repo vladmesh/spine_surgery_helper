@@ -29,13 +29,13 @@ class InterOperationalControlPage(tk.Toplevel):
     def generate(self):
         self.patient_parameters = self.db_helper.get_patient_parameters(self.patient_id)
         parameters = self.db_helper.get_parameters()
-        label = tk.Label(self, text="Интраоперационные параметры для ввода")
+        label = tk.Label(self, text="Интраоперационные параметры\nдля ввода")
         label.grid(row=0, column=0, sticky='w', padx=10, pady=5)
 
-        label = tk.Label(self, text="Расчётные интраоперационные параметры")
+        label = tk.Label(self, text="Расчётные интраоперационные\nпараметры")
         label.grid(row=0, column=1, sticky='w', padx=10, pady=5)
 
-        label = tk.Label(self, text="Расчётные параметры исходной анатомии позвоночника")
+        label = tk.Label(self, text="Расчётные параметры исходной\nанатомии позвоночника")
         label.grid(row=0, column=2, sticky='w', padx=10, pady=5)
 
         i = 1
