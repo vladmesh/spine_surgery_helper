@@ -72,8 +72,11 @@ class CalculateRestorePage(tk.Toplevel):
         entry = self.result_entries[number]
         entry.config(state='normal')
         entry.delete(0, tk.END)
+
         if answer != '':
             answer = round(float(answer), 2)
+            answer = str(answer)
+            answer = answer.replace('.', ',')
         entry.insert(0, str(answer))
         entry.config(state='readonly')
 

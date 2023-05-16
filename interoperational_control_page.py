@@ -46,7 +46,7 @@ class InterOperationalControlPage(tk.Toplevel):
 
             entry = tk.Entry(self)
             entry.grid(row=i, column=2, padx=10, pady=5)
-            entry.insert(0, self.patient_parameters.get_parameter_value(idx, ParameterType.DEFAULT_KT))
+            entry.insert(0, self.patient_parameters.get_parameter_value_str(idx, ParameterType.DEFAULT_KT))
             entry.config(state='readonly')
             self.prev_entries[idx] = entry
 
@@ -80,7 +80,7 @@ class InterOperationalControlPage(tk.Toplevel):
         for idx in self.calc_entries:
             self.calc_entries[idx].config(state='normal')
             self.calc_entries[idx].delete(0, tk.END)
-            self.calc_entries[idx].insert(0, self.patient_parameters.get_parameter_value(idx,
+            self.calc_entries[idx].insert(0, self.patient_parameters.get_parameter_value_str(idx,
                                                                                          ParameterType.INTEROPERATION_CALCULATED))
             self.calc_entries[idx].config(state='readonly')
 

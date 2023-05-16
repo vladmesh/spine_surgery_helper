@@ -46,23 +46,23 @@ class InfoPage(tk.Toplevel):
 
             entry = tk.Entry(self)
             entry.grid(row=i, column=1, padx=8, pady=5)
-            entry.insert(0, self.patient_parameters.get_parameter_value(parameter[0], ParameterType.BROKEN_KT))
+            entry.insert(0, self.patient_parameters.get_parameter_value_str(parameter[0], ParameterType.BROKEN_KT))
             entry.config(state='readonly')
 
             entry = tk.Entry(self)
             entry.grid(row=i, column=2, padx=8, pady=5)
-            entry.insert(0, self.patient_parameters.get_parameter_value(parameter[0], ParameterType.DEFAULT_KT))
+            entry.insert(0, self.patient_parameters.get_parameter_value_str(parameter[0], ParameterType.DEFAULT_KT))
             entry.config(state='readonly')
 
             entry = tk.Entry(self)
             entry.grid(row=i, column=3, padx=8, pady=5)
             entry.insert(0,
-                         self.patient_parameters.get_parameter_value(parameter[0], ParameterType.INTEROPERATION_INPUT))
+                         self.patient_parameters.get_parameter_value_str(parameter[0], ParameterType.INTEROPERATION_INPUT))
             entry.config(state='readonly')
 
             entry = tk.Entry(self)
             entry.grid(row=i, column=4, padx=8, pady=5)
-            entry.insert(0, self.patient_parameters.get_parameter_value(parameter[0],
+            entry.insert(0, self.patient_parameters.get_parameter_value_str(parameter[0],
                                                                         ParameterType.INTEROPERATION_CALCULATED))
             entry.config(state='readonly')
 

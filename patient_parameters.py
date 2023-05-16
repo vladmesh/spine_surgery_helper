@@ -144,6 +144,14 @@ class PatientParameters:
             return ''
         return par.value
 
+    def get_parameter_value_str(self, par_id, par_type: ParameterType):
+        par = self.get_parameter(par_id, par_type)
+        if par is None:
+            return ''
+        str_value = str(par.value)
+        str_val_with_comma = str_value.replace('.', ',')
+        return str_val_with_comma
+
     def get_parameters(self):
         return self.parameters
 
