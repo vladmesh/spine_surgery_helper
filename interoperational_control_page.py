@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import LEFT
 
 from db_helper import DBHelper
 from enums import ParameterType
@@ -41,7 +42,7 @@ class InterOperationalControlPage(tk.Toplevel):
         i = 1
         for idx in (11, 15, 16, 17):
             label_text = f"{idx} - {parameters[idx - 1][1]}"
-            label = tk.Label(self, text=label_text)
+            label = tk.Label(self, text=label_text, justify=LEFT, font=("Arial Bold", 8))
             label.grid(row=i, column=3, sticky='w', padx=10, pady=5)
 
             entry = tk.Entry(self)
