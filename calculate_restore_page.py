@@ -1,7 +1,7 @@
 import tkinter as tk
 import tkinter.messagebox
 import tkinter.simpledialog
-from tkinter import LEFT, RIGHT, Y
+from tkinter import LEFT
 
 from PIL import ImageTk, Image
 from db_helper import DBHelper
@@ -30,43 +30,35 @@ class CalculateRestorePage(tk.Toplevel):
         # image_label.image = image
         # image_label.grid(row=6, column=3, rowspan=10, padx=10, pady=5)
 
-        self.canvas = tk.Canvas(self)
-        self.scrollbar = tk.Scrollbar(self, orient="vertical", command=self.canvas.yview)
-        self.scrollable_frame = tk.Frame(self.canvas)
-        self.scrollbar.pack(side="right", fill="y")
-        self.canvas.pack(side="left", fill="both", expand=True)
-        self.canvas.bind_all('<MouseWheel>', lambda event: self.canvas.yview_scroll(int(-1*(event.delta//120)), "units"))
-
-
         label = tk.Label(self, text=f"Параметры сломанного \n отдела позвоночника")
-        label.grid(in_=self.scrollable_frame, row=0, column=0, sticky='w', padx=10, pady=5)
+        label.grid(row=0, column=0, sticky='w', padx=10, pady=5)
         label = tk.Label(self, text=f"Расчётные параметры \n исходной анатомии позвоночника")
-        label.grid(in_=self.scrollable_frame, row=0, column=1, sticky='w', padx=10, pady=5)
+        label.grid(row=0, column=1, sticky='w', padx=10, pady=5)
 
         for i, (number, description) in enumerate(self.parameters):
             label = tk.Label(self, text=f"{number} – {description}", justify=LEFT)
-            label.grid(in_=self.scrollable_frame, row=i + 1, column=2, sticky='w', padx=10, pady=5)
+            label.grid(row=i + 1, column=2, sticky='w', padx=10, pady=5)
 
             if number not in (18, 19, 20):
                 entry = tk.Entry(self)
-                entry.grid(in_=self.scrollable_frame, row=i + 1, column=0, padx=10, pady=5)
+                entry.grid(row=i + 1, column=0, padx=10, pady=5)
                 self.entries[number] = entry
 
             if number in self.calculated_parameters:
                 result_entry = tk.Entry(self, state='readonly')
-                result_entry.grid(in_=self.scrollable_frame, row=i + 1, column=1, padx=10, pady=5)
+                result_entry.grid(row=i + 1, column=1, padx=10, pady=5)
                 self.result_entries[number] = result_entry
 
 
         calculate_button = tk.Button(self, text="Рассчитать", command=self.calculate)
-        calculate_button.grid(in_=self.scrollable_frame, row=len(self.parameters) + 1, column=0, padx=10, pady=10)
+        calculate_button.grid(row=len(self.parameters) + 1, column=0, padx=10, pady=10)
 
         self.save_button = tk.Button(self, text="Сохранить", command=self.save)
-        self.save_button.grid(in_=self.scrollable_frame, row=len(self.parameters) + 1, column=1, padx=10, pady=10)
+        self.save_button.grid(row=len(self.parameters) + 1, column=1, padx=10, pady=10)
         self.save_button.config(state='disabled')
 
         return_button = tk.Button(self, text="Вернуться", command=self._return)
-        return_button.grid(in_=self.scrollable_frame, row=len(self.parameters) + 1, column=2, padx=10, pady=10)
+        return_button.grid(row=len(self.parameters) + 1, column=2, padx=10, pady=10)
 
     def _return(self):
         if not self.saved:
