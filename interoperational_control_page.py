@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import LEFT
 
+
+from PIL import ImageTk, Image
 from db_helper import DBHelper
 from enums import ParameterType
 
@@ -66,9 +68,9 @@ class InterOperationalControlPage(tk.Toplevel):
         image = Image.open("images/img.png")
         image = image.resize((200, 250), Image.ANTIALIAS)
         image = ImageTk.PhotoImage(image)
-        image_label = tk.Label(self.scrollable_frame, image=image)
+        image_label = tk.Label(self, image=image)
         image_label.image = image
-        image_label.grid(row=6, column=3, rowspan=10, padx=10, pady=5)
+        image_label.grid(row=6, column=4, rowspan=10, padx=10, pady=5)
 
         self.return_button = tk.Button(self, text="Вернуться", command=self._return)
         self.return_button.grid(row=12, column=0, padx=10, pady=10)
