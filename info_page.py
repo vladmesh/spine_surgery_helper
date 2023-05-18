@@ -27,40 +27,50 @@ class InfoPage(tk.Toplevel):
         self.patient_parameters = self.db_helper.get_patient_parameters(self.patient_id)
         parameters = self.db_helper.get_parameters()
 
-        label = tk.Label(self, text="Параметры сломанного\nотдела позвоночника\n на КТ", font=("Arial Bold", 7))
+        self.canvas = tk.Canvas(self, borderwidth=0)
+        self.v_scrollbar = tk.Scrollbar(self, orient="vertical", command=self.canvas.yview)
+        self.canvas.configure(yscrollcommand=self.v_scrollbar.set)
+
+        # Create a frame inside the canvas which will be scrolled with it
+        self.scrollable_frame = tk.Frame(self.canvas)
+        self.scrollable_frame.bind("<Configure>", lambda e: self.canvas.configure(scrollregion=self.canvas.bbox("all")))
+
+        self.canvas.create_window((0, 0), window=self.scrollable_frame, anchor="nw")
+
+        label = tk.Label(self.scrollable_frame, text="Параметры сломанного\nотдела позвоночника\n на КТ", font=("Arial Bold", 7))
         label.grid(row=0, column=1, sticky='w', padx=5, pady=5)
 
-        label = tk.Label(self, text="Расчётные параметры\n исходной анатомии\n позвоночника", font=("Arial Bold", 7))
+        label = tk.Label(self.scrollable_frame, text="Расчётные параметры\n исходной анатомии\n позвоночника", font=("Arial Bold", 7))
         label.grid(row=0, column=2, sticky='w', padx=5, pady=5)
 
-        label = tk.Label(self, text="Интраоперационные параметры\n для ввода", font=("Arial Bold", 7))
+        label = tk.Label(self.scrollable_frame, text="Интраоперационные параметры\n для ввода", font=("Arial Bold", 7))
         label.grid(row=0, column=3, sticky='w', padx=5, pady=5)
 
-        label = tk.Label(self, text="Расчётные интраоперационные\n параметры", font=("Arial Bold", 7))
+        label = tk.Label(self.scrollable_frame, text="Расчётные интраоперационные\n параметры", font=("Arial Bold", 7))
         label.grid(row=0, column=4, sticky='w', padx=5, pady=5)
         i = 1
         for parameter in parameters:
             label_text = f"{parameter[0]} - {parameter[1]}"
-            label = tk.Label(self, text=label_text, font=("Arial Bold", 7), justify=LEFT)
+            label = tk.Label(self.scrollable_frame, text=label_text, font=("Arial Bold", 7), justify=LEFT)
             label.grid(row=i, column=0, sticky='w', padx=5, pady=5)
 
-            entry = tk.Entry(self, width=9)
+            entry = tk.Entry(self.scrollable_frame, width=9)
             entry.grid(row=i, column=1, padx=8, pady=5)
             entry.insert(0, self.patient_parameters.get_parameter_value_str(parameter[0], ParameterType.BROKEN_KT))
             entry.config(state='readonly')
 
-            entry = tk.Entry(self, width=9)
+            entry = tk.Entry(self.scrollable_frame, width=9)
             entry.grid(row=i, column=2, padx=8, pady=5)
             entry.insert(0, self.patient_parameters.get_parameter_value_str(parameter[0], ParameterType.DEFAULT_KT))
             entry.config(state='readonly')
 
-            entry = tk.Entry(self, width=9)
+            entry = tk.Entry(self.scrollable_frame, width=9)
             entry.grid(row=i, column=3, padx=8, pady=5)
             entry.insert(0,
                          self.patient_parameters.get_parameter_value_str(parameter[0], ParameterType.INTEROPERATION_INPUT))
             entry.config(state='readonly')
 
-            entry = tk.Entry(self, width=9)
+            entry = tk.Entry(self.scrollable_frame, width=9)
             entry.grid(row=i, column=4, padx=8, pady=5)
             entry.insert(0, self.patient_parameters.get_parameter_value_str(parameter[0],
                                                                         ParameterType.INTEROPERATION_CALCULATED))
@@ -68,11 +78,14 @@ class InfoPage(tk.Toplevel):
 
             i += 1
 
-        self.to_excel_button = tk.Button(self, text="Экспорт", command=self.to_excel)
+        self.to_excel_button = tk.Button(self.scrollable_frame, text="Экспорт", command=self.to_excel)
         self.to_excel_button.grid(row=i, column=0, padx=8, pady=8)
 
-        self.send_mail_button = tk.Button(self, text="Отправить на почту", command=self.send_mail)
+        self.send_mail_button = tk.Button(self.scrollable_frame, text="Отправить на почту", command=self.send_mail)
         self.send_mail_button.grid(row=i, column=1, padx=8, pady=8)
+
+        self.canvas.pack(side="left", fill="both", expand=True)
+        self.v_scrollbar.pack(side="right", fill="y")
 
     def to_excel(self):
         patient_name = self.db_helper.get_patient_name(self.patient_id)
