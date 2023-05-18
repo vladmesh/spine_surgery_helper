@@ -63,6 +63,13 @@ class InterOperationalControlPage(tk.Toplevel):
                 self.input_entries[idx] = entry
             i += 1
 
+        image = Image.open("images/img.png")
+        image = image.resize((200, 250), Image.ANTIALIAS)
+        image = ImageTk.PhotoImage(image)
+        image_label = tk.Label(self.scrollable_frame, image=image)
+        image_label.image = image
+        image_label.grid(row=6, column=3, rowspan=10, padx=10, pady=5)
+
         self.return_button = tk.Button(self, text="Вернуться", command=self._return)
         self.return_button.grid(row=12, column=0, padx=10, pady=10)
 
