@@ -37,7 +37,7 @@ class CalculateRestorePage(tk.Toplevel):
 
         self.canvas.create_window((0, 0), window=self.scrollable_frame, anchor="nw")
 
-        image = Image.open("images/img.png")
+        image = Image.open("img/img.png")
         image = image.resize((200, 250), Image.ANTIALIAS)
         image = ImageTk.PhotoImage(image)
         image_label = tk.Label(self.scrollable_frame, image=image)
