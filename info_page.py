@@ -90,11 +90,8 @@ class InfoPage(tk.Toplevel):
         self.v_scrollbar.pack(side="right", fill="y")
 
         self.scrollable_frame.bind('<Configure>', self._on_frame_configure)
-        if os.name == 'nt':
-            self.scrollable_frame.bind_all("<MouseWheel>", self._on_mousewheel)
-        else:
-            self.scrollable_frame.bind_all("<Button-4>", self._on_mousewheel)
-            self.scrollable_frame.bind_all("<Button-5>", self._on_mousewheel)
+        self.scrollable_frame.bind('<Enter>', self._bind_mousewheel)
+        self.scrollable_frame.bind('<Leave>', self._unbind_mousewheel)
 
     def to_excel(self):
         patient_name = self.db_helper.get_patient_name(self.patient_id)
@@ -149,3 +146,17 @@ class InfoPage(tk.Toplevel):
                 self.canvas.yview_scroll(-1, "units")
             elif event.num == 5:
                 self.canvas.yview_scroll(1, "units")
+
+    def _bind_mousewheel(self, event):
+        if os.name == 'nt':
+            self.scrollable_frame.bind_all("<MouseWheel>", self._on_mousewheel)
+        else:
+            self.scrollable_frame.bind_all("<Button-4>", self._on_mousewheel)
+            self.scrollable_frame.bind_all("<Button-5>", self._on_mousewheel)
+
+    def _unbind_mousewheel(self, event):
+        if os.name == 'nt':
+            self.scrollable_frame.unbind_all("<MouseWheel>")
+        else:
+            self.scrollable_frame.unbind_all("<Button-4>")
+            self.scrollable_frame.unbind_all("<Button-5>")
