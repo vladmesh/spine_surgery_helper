@@ -1,3 +1,4 @@
+import os
 import tkinter as tk
 import tkinter.messagebox
 import tkinter.simpledialog
@@ -78,6 +79,13 @@ class CalculateRestorePage(tk.Toplevel):
         self.canvas.pack(side="left", fill="both", expand=True)
         self.v_scrollbar.pack(side="right", fill="y")
 
+        self.scrollable_frame.bind('<Configure>', self._on_frame_configure)
+        if os.name == 'nt':
+            self.scrollable_frame.bind_all("<MouseWheel>", self._on_mousewheel)
+        else:
+            self.scrollable_frame.bind_all("<Button-4>", self._on_mousewheel)
+            self.scrollable_frame.bind_all("<Button-5>", self._on_mousewheel)
+
 
     def _return(self):
         if not self.saved:
@@ -148,3 +156,17 @@ class CalculateRestorePage(tk.Toplevel):
                                                                               ParameterType.DEFAULT_KT))
 
         self.saved = True
+
+    def _on_frame_configure(self, event=None):
+        '''Reset the scroll region to encompass the inner frame'''
+        self.canvas.configure(scrollregion=self.canvas.bbox("all"))
+
+    def _on_mousewheel(self, event):
+        """Linux uses event.num; Windows / Mac uses event.delta"""
+        if os.name == 'nt':
+            self.canvas.yview_scroll(-1 * (event.delta // 120), "units")
+        else:
+            if event.num == 4:
+                self.canvas.yview_scroll(-1, "units")
+            elif event.num == 5:
+                self.canvas.yview_scroll(1, "units")
