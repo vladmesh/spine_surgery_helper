@@ -3,7 +3,9 @@ from email import encoders
 from email.mime.base import MIMEBase
 
 from dotenv import load_dotenv
-
+import tkinter as tk
+from tkinter import LEFT
+import tkinter.messagebox
 
 class EmailHelper:
     def __init__(self):
@@ -37,7 +39,7 @@ class EmailHelper:
             server.quit()
             return True
         except Exception as e:
-            print(e)
+            tk.messagebox.showerror("Ошибка", e)
             return False
 
     @staticmethod
