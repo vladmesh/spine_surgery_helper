@@ -5,6 +5,7 @@ from tkinter import LEFT
 from PIL import ImageTk, Image
 from db_helper import DBHelper
 from enums import ParameterType
+from utils import resource_path
 
 
 class InterOperationalControlPage(tk.Toplevel):
@@ -65,7 +66,8 @@ class InterOperationalControlPage(tk.Toplevel):
                 self.input_entries[idx] = entry
             i += 1
 
-        image = Image.open("img/img.png")
+        img_path = resource_path("img/inter.png")
+        image = Image.open(img_path)
         image = image.resize((200, 250), Image.ANTIALIAS)
         image = ImageTk.PhotoImage(image)
         image_label = tk.Label(self, image=image)

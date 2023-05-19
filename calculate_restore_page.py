@@ -8,6 +8,7 @@ from PIL import ImageTk, Image
 from db_helper import DBHelper
 from enums import ParameterType
 from patient_parameters import PatientParameters
+from utils import resource_path
 
 
 class CalculateRestorePage(tk.Toplevel):
@@ -37,7 +38,8 @@ class CalculateRestorePage(tk.Toplevel):
 
         self.canvas.create_window((0, 0), window=self.scrollable_frame, anchor="nw")
 
-        image = Image.open("img/img.png")
+        img_path = resource_path("img/img.png")
+        image = Image.open(img_path)
         image = image.resize((200, 250), Image.ANTIALIAS)
         image = ImageTk.PhotoImage(image)
         image_label = tk.Label(self.scrollable_frame, image=image)
