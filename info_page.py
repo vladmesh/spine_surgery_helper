@@ -2,6 +2,7 @@ import os
 import tkinter as tk
 from tkinter import LEFT
 import tkinter.messagebox
+import tkinter.simpledialog
 
 from db_helper import DBHelper
 from enums import ParameterType
@@ -19,6 +20,7 @@ class InfoPage(tk.Toplevel):
         self.patient_id = patient_id
 
         self.patient_parameters = None
+        self.email_helper = EmailHelper()
         self.generate()
 
 
@@ -131,7 +133,17 @@ class InfoPage(tk.Toplevel):
         tk.messagebox.showinfo("Экспорт", f"Отчёт успешно экспортирован в файл {filename}")
 
     def send_mail(self):
-        pass
+        patient_name = self.db_helper.get_patient_name(self.patient_id)
+        filename = f"Report_{patient_name}.xlsx"
+        email = tk.simpledialog.askstring("Отправка", "Введите почту")
+        if not self.email_helper.validate_email(email):
+            tk.messagebox.showerror("Ошибка", "Некорректный адрес почты")
+            return
+        if not self.email_helper.send_email(email, filename):
+            tk.messagebox.showerror("Ошибка", "Не удалось отправить письмо")
+            return
+        tk.messagebox.showinfo("Отправка", f"Отчёт успешно отправлен на почту {email}")
+
 
     def _on_frame_configure(self, event=None):
         '''Reset the scroll region to encompass the inner frame'''
