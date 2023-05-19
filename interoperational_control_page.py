@@ -65,7 +65,7 @@ class InterOperationalControlPage(tk.Toplevel):
                 self.input_entries[idx] = entry
             i += 1
 
-        image = Image.open("images/img.png")
+        image = Image.open("img/img.png")
         image = image.resize((200, 250), Image.ANTIALIAS)
         image = ImageTk.PhotoImage(image)
         image_label = tk.Label(self, image=image)
