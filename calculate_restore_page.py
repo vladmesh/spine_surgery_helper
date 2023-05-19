@@ -24,7 +24,7 @@ class CalculateRestorePage(tk.Toplevel):
         self.entries = {}
         self.result_entries = {}
         self.calculated_parameters = [5, 6, 13, 15, 16, 17, 18, 19, 20]
-        self.obligatory_params = [1, 2, 3, 4, 5, 5, 7, 8, 9, 10, 11]
+        self.obligatory_params = [1, 2, 3, 4, 7, 8, 9, 10, 11]
 
         self.canvas = tk.Canvas(self, borderwidth=0)
         self.v_scrollbar = tk.Scrollbar(self, orient="vertical", command=self.canvas.yview)
