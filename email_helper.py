@@ -1,17 +1,20 @@
 import os
+from email import encoders
+from email.mime.base import MIMEBase
+
+from dotenv import load_dotenv
 
 
 class EmailHelper:
     def __init__(self):
+        load_dotenv()
         self.email = os.getenv('EMAIL')
         self.password = os.getenv('EMAIL_PASSWORD')
-        self.smtp_server = os.getenv('SMTP_SERVER')
-        self.smtp_port = int(os.getenv('SMTP_PORT'))
-        self.smtp_ssl = os.getenv('SMTP_SSL')
+        self.smtp_server = "smtp.yandex.ru"
+        self.smtp_port = 587
 
-    def send_email(self, to, subject, message):
+    def send_email(self, to, subject, filename):
         import smtplib
-        from email.mime.text import MIMEText
         from email.mime.multipart import MIMEMultipart
 
         try:
@@ -20,7 +23,11 @@ class EmailHelper:
             msg['To'] = to
             msg['Subject'] = subject
 
-            msg.attach(MIMEText(message, 'plain'))
+            part = MIMEBase('application', "octet-stream")
+            part.set_payload(open(filename, "rb").read())
+            encoders.encode_base64(part)
+            part.add_header('Content-Disposition', 'attachment; filename="WorkBook3.xlsx"')
+            msg.attach(part)
 
             server = smtplib.SMTP(self.smtp_server, self.smtp_port)
             server.starttls()
@@ -29,7 +36,8 @@ class EmailHelper:
             server.sendmail(self.email, to, text)
             server.quit()
             return True
-        except:
+        except Exception as e:
+            print(e)
             return False
 
     @staticmethod

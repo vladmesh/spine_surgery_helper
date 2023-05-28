@@ -5,6 +5,7 @@ import tkinter.messagebox
 import tkinter.simpledialog
 
 from db_helper import DBHelper
+from email_helper import EmailHelper
 from enums import ParameterType
 import xlsxwriter
 
@@ -23,7 +24,6 @@ class InfoPage(tk.Toplevel):
         self.email_helper = EmailHelper()
         self.generate()
 
-
     def _return(self):
         self.destroy()
 
@@ -41,10 +41,12 @@ class InfoPage(tk.Toplevel):
 
         self.canvas.create_window((0, 0), window=self.scrollable_frame, anchor="nw")
 
-        label = tk.Label(self.scrollable_frame, text="Параметры сломанного\nотдела позвоночника\n на КТ", font=("Arial Bold", 7))
+        label = tk.Label(self.scrollable_frame, text="Параметры сломанного\nотдела позвоночника\n на КТ",
+                         font=("Arial Bold", 7))
         label.grid(row=0, column=1, sticky='w', padx=5, pady=5)
 
-        label = tk.Label(self.scrollable_frame, text="Расчётные параметры\n исходной анатомии\n позвоночника", font=("Arial Bold", 7))
+        label = tk.Label(self.scrollable_frame, text="Расчётные параметры\n исходной анатомии\n позвоночника",
+                         font=("Arial Bold", 7))
         label.grid(row=0, column=2, sticky='w', padx=5, pady=5)
 
         label = tk.Label(self.scrollable_frame, text="Интраоперационные параметры\n для ввода", font=("Arial Bold", 7))
@@ -71,13 +73,14 @@ class InfoPage(tk.Toplevel):
             entry = tk.Entry(self.scrollable_frame, width=9)
             entry.grid(row=i, column=3, padx=8, pady=5)
             entry.insert(0,
-                         self.patient_parameters.get_parameter_value_str(parameter[0], ParameterType.INTEROPERATION_INPUT))
+                         self.patient_parameters.get_parameter_value_str(parameter[0],
+                                                                         ParameterType.INTEROPERATION_INPUT))
             entry.config(state='readonly')
 
             entry = tk.Entry(self.scrollable_frame, width=9)
             entry.grid(row=i, column=4, padx=8, pady=5)
             entry.insert(0, self.patient_parameters.get_parameter_value_str(parameter[0],
-                                                                        ParameterType.INTEROPERATION_CALCULATED))
+                                                                            ParameterType.INTEROPERATION_CALCULATED))
             entry.config(state='readonly')
 
             i += 1
@@ -95,12 +98,13 @@ class InfoPage(tk.Toplevel):
         self.scrollable_frame.bind('<Enter>', self._bind_mousewheel)
         self.scrollable_frame.bind('<Leave>', self._unbind_mousewheel)
 
-    def to_excel(self):
+    def to_excel(self, need_message=True):
         patient_name = self.db_helper.get_patient_name(self.patient_id)
         filename = f"Report_{patient_name}.xlsx"
         workbook = xlsxwriter.Workbook(filename)
         bold = workbook.add_format({'bold': True})
-        cell_format = workbook.add_format({'text_wrap': True, 'bold': True, 'align': 'center', 'font': 'Times New Roman'})
+        cell_format = workbook.add_format(
+            {'text_wrap': True, 'bold': True, 'align': 'center', 'font': 'Times New Roman'})
         auto_wrap = workbook.add_format({'text_wrap': True, 'align': 'left', 'font': 'Times New Roman'})
         worksheet = workbook.add_worksheet()
         worksheet.write(0, 0, "Фамилия И.О., год рождения:", bold)
@@ -130,20 +134,22 @@ class InfoPage(tk.Toplevel):
                                                                               ParameterType.INTEROPERATION_CALCULATED))
             i += 1
         workbook.close()
-        tk.messagebox.showinfo("Экспорт", f"Отчёт успешно экспортирован в файл {filename}")
+        if need_message:
+            tk.messagebox.showinfo("Экспорт", f"Отчёт успешно экспортирован в файл {filename}")
 
     def send_mail(self):
         patient_name = self.db_helper.get_patient_name(self.patient_id)
+        self.to_excel(False)
         filename = f"Report_{patient_name}.xlsx"
+
         email = tk.simpledialog.askstring("Отправка", "Введите почту")
         if not self.email_helper.validate_email(email):
             tk.messagebox.showerror("Ошибка", "Некорректный адрес почты")
             return
-        if not self.email_helper.send_email(email, filename):
+        if not self.email_helper.send_email(email, "Отчёт по хирургии позвоночника", filename):
             tk.messagebox.showerror("Ошибка", "Не удалось отправить письмо")
             return
         tk.messagebox.showinfo("Отправка", f"Отчёт успешно отправлен на почту {email}")
-
 
     def _on_frame_configure(self, event=None):
         '''Reset the scroll region to encompass the inner frame'''
