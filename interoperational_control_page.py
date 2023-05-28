@@ -87,7 +87,11 @@ class InterOperationalControlPage(tk.Toplevel):
     def calculate(self):
         self.patient_parameters.delete_parameters_by_type(ParameterType.INTEROPERATION_INPUT)
         for idx in self.input_entries:
-            self.patient_parameters.add_parameter(idx, ParameterType.INTEROPERATION_INPUT, self.input_entries[idx].get())
+            value_str = self.input_entries[idx].get()
+            if value_str == '':
+                continue
+            value_str = value_str.replace(',', '.')
+            self.patient_parameters.add_parameter(idx, ParameterType.INTEROPERATION_INPUT, value_str)
         self.patient_parameters.calculate_control()
         for idx in self.calc_entries:
             self.calc_entries[idx].config(state='normal')

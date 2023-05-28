@@ -126,6 +126,7 @@ class CalculateRestorePage(tk.Toplevel):
             if str_value == '':
                 continue
             try:
+                str_value = str_value.replace(',', '.')
                 float_value = float(str_value)
             except ValueError:
                 print(f"Неверный формат значения параметра {idx}")
