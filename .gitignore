@@ -2,3 +2,4 @@ db.sqlite
 venv
 /build/
 /dist/
+.env
